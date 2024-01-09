@@ -1,0 +1,37 @@
+# Data Acquition
+1. Obtain ligth curve data from TESS archives
+2. LightCurve has functions that allow search for and download this data directly within the package
+
+# Preprocessing Data
+1. clean the light curva data using lightKurve's tools
+2. remove noise,outliers, normalize the data, correct systematic trends
+
+# Transit Search
+1. algo to search for periodic dips in brightness
+
+# Transit modeling
+1. once transits are found,  model them to estimate the planet's properties like size, orbital period
+
+# Valildation
+1. confirm that signals are from planets and not false positvies
+2. check consistent transit depth, duration and shape 
+
+####### Automation ######## 
+1. Data retrivel ---> use MAST API to retrieve light curve data
+2. Automate ---> the download and storage of light currve files using a scheduled job and a trigger based on data availability
+3. Preprocessing ---> write scripts using LightKurve or similar library to clean the data ---. flatten the curve,remove outliers, noramlize the flux --> Automate all this
+4. Transit signal detection --> Apply algorithms like BLS to search for periodic dips in brightness. ---> implement additional filtters to exclude false positives
+5. candidate validation ---> use machine learning models trained on confirmed exoplanets to predict the likliehood of each candidate ---> features could include transit parameters, stellar characteristics and derived statistical measures --> implement feedback loo where candidates marked as false positives help retrain the model 
+6. Catalogue and review ---> store detected candidates in db with all parameters ---> provide web interface for astronomers to review candidates
+7. Notification system ---> create alerts for high probability candidates 
+8. Integration with Observatories ---> for high probability candidates, automate the process of requesting follow up observations from ground based observatories. 
+
+#### RESOURCES ######
+# database
+# web interface
+# security
+
+
+###### Tech Stack #########
+
+
