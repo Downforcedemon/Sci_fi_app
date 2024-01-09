@@ -1,0 +1,4 @@
+# InvalidDefinitionException --> No serializer found for class scifimuseum.com.BookDTO and no properties discovered to create BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS)
+SOLUTION: jackson was unable to covert java objects of backend to json format for web browser.
+jackson couldn't serialize the BookDTO because it needs getter methods to serialize object properties. 
+jackson also needs fields in BookDTO to serialize so class needs non-static, non-transparent fields

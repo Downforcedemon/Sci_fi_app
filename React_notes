@@ -1,0 +1,23 @@
+###### Functionality ########3
+1. BookDetails ---> display all info
+2. BookList ---> view details of the book 
+3. Search 
+4. Add forms
+5. Validate forms
+7. Navigation/routing between pages
+8. Styling ---> CSS-in-JS library
+
+9. space between home and Books        DONE
+# create css file ( reference: NavBar.css) and import it in className 
+
+10. Books tab enhacement     DONE
+# BooksController --> has getAllBooks method
+# BooksPage.js --> fetch and display the list
+# App.js --> add new route for BooksPage 
+# NavBar.js --> route for "Books" tab to point to BooksPage component which can be done with link component in 'react-router-dom' 
+
+11. Create project tab and inside that create Astronomy Project tab and that will have data search for Tess to find exoplanets.   DONE
+# Create projectsPage.js --> new page in app, 
+# create PlanetSearch.js --> functionality yet to be defined
+# App.js --> routing --> include new routes: /projects for the 'ProjectPage' and /projects/planetsearch for the ProjectSearch page
+# NavBar.js --> add "Projects" tab to enable navigation 
