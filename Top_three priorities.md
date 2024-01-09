@@ -8,6 +8,8 @@
   
 3. Database setup
 
+
+
 4. Create a basic backend
 A --> initialize the project with Spring book or manually set it up
 B --> Defind the schema in SQL
