@@ -32,6 +32,67 @@
 # security
 
 
-###### Tech Stack #########
+############################################################################################################################################\
+############## SET UP JAVA BACKEND ####################3
+# create java classes to represent Light curve data model---->  LightCurve.java
+--> @Entity enables this class to map with corresponding table in DB
+--> integration point for TESS API
+--> others depend on the data stored in instances of this class
 
+# LightCurveRepository.java
+---> provides CRUD
+---> methods to findall, searchall, etc.
+
+# LightCurveService.java
+---> business logic
+---> interact with LightCurveRepository for database operations
+
+# LightCurveController.java
+---> handles http requests and interacts with Service.java to perform operations 
+---> endpoint for retrieving curves by ID, adding new curve
+
+####### API CALL TO TESS #############  PYTHON     ######################################################################################
+# Setup python environment ---> will both handle API and preprocessing and java an setup an API later with python module if needed data 
+# Setup python virtual environment ---> python3 -m venv venv in project directory  --->  terminal changes to venv in front of kali user
+# pip instal requests for http and pip install pandas for data handling
+
+# ####### understand TESS API ########
+# it's endpoints, request format, structure of the response data
+---> root URL
+---> specific URLs for different data sets
+---> Request methods
+---> query parameters
+----> response format
+---> reate limits 
+-->  authentication
+-------------> TEST --> curl,postman or python requests 
+# options options options options options options options options options options options options options options options 
+
+# csv files bullk download ---> https://archive.stsci.edu/tess/bulk_downloads/bulk_downloads_tce.html
+
+# Mast astroquery.mast ----> https://astroquery.readthedocs.io/en/latest/mast/mast.html
+ ---> pip install astroquery
+ ----> 
+
+
+# Identify specific data sets ---> e.g ---> light curve, full-frame images etc. 
+---> query parameters ---> target names, coordinates, mission, instruments
+---> frame plot ---> how to decide which ??? ---> code to examine muliple frames to identify best aperture, check consistency across different frames. 
+
+
+
+# data retrievel scripts to automate the querying
+
+
+
+
+# write python functions/classes for preprocessing steps
+--> data cleaning ---> remove artifacts or errorneous readings
+--> Data transformation ---> format
+
+# Algorithm for analysis
+
+# Data storage to sql
+
+# Python-java integration with Flask or FastAPI 
 
