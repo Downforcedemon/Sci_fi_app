@@ -2,7 +2,7 @@ from astroquery.mast import Observations
 
 try:
     # Log in to MAST (ensure you have the correct token)
-    my_session = Observations.login(token="your_token_here")
+    my_session = Observations.login(token="new token")
 
     # Query for objects around "V4046 Sgr"
     t = Observations.query_object("V4046 Sgr", radius=".2 deg")
