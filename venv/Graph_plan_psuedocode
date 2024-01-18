@@ -1,0 +1,29 @@
+# ## unfolded light curve ---> 
+# raw light curve displays the flux of the star over time.
+
+# # # Normalized light curve --->
+# The normalized light curve displays the flux of the star over time, but the flux has been normalized to a value of 1.0.
+# compare the normalized light curve to the raw light curve 
+
+### folded light curve --->
+# fold at best period and epoch
+# the biggest dip in the light curve is the transit event
+# tall spike is strongest signal corresponsts to orbital period of the planet
+
+### BLS Periodogram --->    
+# tall spike is strongest signal corresponsts to orbital period of the planet
+
+### phase folded light curve --->
+# light data is folded at the period of the strongest period found by BLS method.
+# x-axis is the phase of the orbit and y-axis is the flux of the star
+# phase 0 is the transit event
+# transit is deep drop in flux at the same phase each time 
+
+
+## Flow of the diagram show in React app
+# 1. User triggers an event in React app that checks diagrams of stars for one day
+# 2. React app makes a request to the backend server which is java/flask app
+# 3. server calls the python service which processes the data and generate diagrams
+# 4. python services saves the diagrams and returns the file paths to the server
+# 4. server responds to the frontend with image URLs or encoded images
+#. 5. React app displays the images to the user 
