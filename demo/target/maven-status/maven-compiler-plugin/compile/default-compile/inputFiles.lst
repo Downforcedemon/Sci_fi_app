@@ -2,5 +2,9 @@
 /home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/BookDTO.java
 /home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/Books.java
 /home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/BooksRepository.java
+/home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/exoplanetsearch/LightCurveController.java
+/home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/exoplanetsearch/LightCurveService.java
+/home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/exoplanetsearch/LightCurve.java
 /home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/BookService.java
 /home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/BooksController.java
+/home/kali/Downloads/Sci_fi_app/demo/src/main/java/scifimuseum/com/exoplanetsearch/LightCurveRepository.java

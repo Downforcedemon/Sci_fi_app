@@ -23,7 +23,7 @@
 ## Flow of the diagram show in React app
 # 1. User triggers an event in React app that checks diagrams of stars for one day
 # 2. React app makes a request to the backend server which is java/flask app
-# 3. server calls the python service which processes the data and generate diagrams
-# 4. python services saves the diagrams and returns the file paths to the server
+# 3. server calls the python service which processes the data and generate diagrams ---> Search_new.py 
+# 4. python services saves the diagrams and returns the file paths to the server ---> diagram_generator.py 
 # 4. server responds to the frontend with image URLs or encoded images
-#. 5. React app displays the images to the user 
+# 5. React app displays the images to the user 

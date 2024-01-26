@@ -1,90 +1,89 @@
 import psycopg2
-from lightkurve import search_targetpixelfile, search_lightcurvefile
+from lightkurve import search_targetpixelfile
 import numpy as np
-from astropy.time import Time
+import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
+import matplotlib 
+
+matplotlib.use('Agg')  # Use a non-interactive backend
 
 # Database connection parameters
 db_params = {
-    "host": "192.168.0.48",
+    "host": "192.168.0.45",
     "database": "Star_light",
     "user": "postgres",
-    "password": "password" 
+    "password": "password"
 }
 
-# Function to fetch star data from the database
-def fetch_star_data():
-    conn = None
-    try:
-        conn = psycopg2.connect(**db_params)
-        cur = conn.cursor()
-        cur.execute("SELECT ticid FROM star_light LIMIT 1")  
-        star_data = cur.fetchone()
-        cur.close()
-        return star_data
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
+def save_figure_to_base64(fig):
+    buf = BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    plt.close(fig)
+    return base64.b64encode(buf.read()).decode('utf-8')
 
-# Function to process the light curve of a star
+def fetch_all_star_data():
+    conn = psycopg2.connect(**db_params)
+    cur = conn.cursor()
+    cur.execute("SELECT ticid FROM star_light ORDER BY ticid")
+    all_star_data = cur.fetchall()
+    cur.close()
+    conn.close()
+    return all_star_data
+
 def process_star(ticid):
+    diagrams = {
+        "snapshot": None,
+        "lightcurve": None,
+        "flatlightcurve": None,
+        "foldedlightcurve": None
+    }
     try:
-        print(f"Processing TIC ID {ticid}")
+        search_result = search_targetpixelfile(f"TIC {ticid}", mission='TESS')
+        tpf_collection = search_result.download_all(quality_bitmask='default')
 
-        # Retrieve the target pixel file. 
-        search_result = search_targetpixelfile(f"TIC {ticid}")
-        tpf_collection = search_result.download_all(quality_bitmask='hardest')
+        if not tpf_collection:
+            print(f"No target pixel files found for TIC ID {ticid}")
+            return diagrams
 
-        # Check if the target pixel file is available
-        if tpf_collection is None or len(tpf_collection) == 0:
-            print(f"No target pixel file found for TIC ID {ticid}")
-            return
-        
-        # process each target pixel file in the collection
         for tpf in tpf_collection:
-            print(f"Processing file {tpf.path}")
+            # Process the first TPF to create diagrams
+            fig, ax = plt.subplots()
+            tpf.plot(ax=ax)
+            diagrams["snapshot"] = save_figure_to_base64(fig)
 
-            # plot a single frame
-            tpf.plot(frame=42)
+            lc = tpf.to_lightcurve()
+            fig, ax = plt.subplots()
+            lc.plot(ax=ax)
+            diagrams["lightcurve"] = save_figure_to_base64(fig)
 
-            #Extract and flatten the curve
-            lc = tpf.to_lightcurve(aperture_mask=tpf.pipeline_mask).flatten()
+            flat_lc = lc.flatten(window_length=401)
+            fig, ax = plt.subplots()
+            flat_lc.plot(ax=ax)
+            diagrams["flatlightcurve"] = save_figure_to_base64(fig)
 
-            # perform a periodogram analysis to find the period with highest power
-            period = np.linspace(0.5,15,10000)
-            bls_periodogram = lc.to_periodogram(method = "bls", period=period,frequency_factor= 500)
+            periodogram = flat_lc.to_periodogram(oversample_factor=1)
+            fig, ax = plt.subplots()
+            periodogram.plot(ax=ax)
+            diagrams["foldedlightcurve"] = save_figure_to_base64(fig)
+            break  # Only process the first TPF for simplicity
 
-            # Get the period, transit, and duration for the strongest signal in the periodogram
-            planet_period = bls_periodogram.period_at_max_power
-            planet_t0 = bls_periodogram.transit_time_at_max_power
-            planet_duration = bls_periodogram.duration_at_max_power
-
-            # Fold the light curve at the period of the strongest signal to look for transits
-            folded_lc = lc.fold(period=planet_period, epoch_time=planet_t0)
-            folded_lc.plot()
-
-            # covert the transit time to a human readable format
-            transit_date = Time(planet_t0, format='jd', scale='utc')
-
-            # print out the period, transit time, and duration
-            print(f"Period: {planet_period}")
-            print(f"Transit Time (Human-Readable): {transit_date.iso}")
-            print(f"Duration: {planet_duration}")
+        with psycopg2.connect(**db_params) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE star_light 
+                    SET diagram_snapshot = %s, 
+                        diagram_lightcurve = %s,
+                        diagram_flatlightcurve = %s,
+                        diagram_foldedlightcurve = %s
+                    WHERE ticid = %s
+                """, (diagrams["snapshot"], diagrams["lightcurve"], 
+                      diagrams["flatlightcurve"], diagrams["foldedlightcurve"], ticid))
 
     except Exception as e:
-            print(f"Error processing file {tpf.path}: {e}")
-            
-    except Exception as e:
-        print(f"Error processing TIC ID {ticid}: {e}") 
+        print(f"Error processing TIC ID {ticid}: {e}")
 
-# Main function
-star_data = fetch_star_data()
-if star_data: 
-      process_star(star_data[0])
-else:
-      print("No star data found in the database")
+    return diagrams
 
 
-
-   
